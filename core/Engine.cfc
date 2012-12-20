@@ -46,7 +46,7 @@
 	</cffunction>
 
 	<cffunction name="setBeanFactory" access="public" returntype="void">
-		<cfargument name="beanFactory" type="coldspring.beans.DefaultXmlBeanFactory" required="true" />
+		<cfargument name="beanFactory" required="true" />
 		<cfset variables.beanFactory = arguments.beanFactory />
 	</cffunction>
 	
@@ -253,11 +253,11 @@
 		<cfset var resourceReference = "" />
 		<cfset resourceReference = arguments.resource.getResourceReference() />
 		<cfset targetComponent = resourceReference.getTargetComponent() />
-		
+
 		<cfif hasBeanFactory() and getBeanFactory().containsBean(targetComponent)>
 			<cfset targetComponent = getBeanFactory().getBean(targetComponent) />
 		</cfif>
-		
+
 		<cfset representation = getComponentDispatcher().run(targetComponent, 
 					arguments.resource.getTargetMethod(),
 					arguments.resource.getParamStruct()) />
@@ -382,6 +382,7 @@
 			Ensure the response headers respond correctly to what
 			was configured and requested.
 		// --->
+		<cfcontent reset="true" />
 		<cfheader statuscode="#representation.getResponseHeaders().getStatusCode()#" />
 		<cfheader name="Content-Type" value="#format.respondsWith()#" />
 		<cfheader name="Access-Control" value="allow <*>" /><!--- this allows cross-domain calls; which should potentially be configurable --->
